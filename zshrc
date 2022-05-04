@@ -1,59 +1,102 @@
-export ZSH=$HOME/.oh-my-zsh # Path to your oh-my-zsh installation.
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+{
+	eval `ssh-agent`
+	ssh-add ~/.ssh/ddang_sshkey
+} &> /dev/null
 
-ZSH_THEME=powerlevel10k/powerlevel10k
-SPACESHIP_BATTERY_SHOW=always
-SPACESHIP_GIT_STATUS_SHOW=false
-COMPLETION_WAITING_DOTS="true" #enable red dots during cmpletion
-plugins=(git common-aliases svn-fast-info vi-mode globalias z colored-man-pages fancy-ctrl-z zsh-autosuggestions alias-tips)
-if [ ! -z ${INSIDE_EMACS+x} ]; then
-	plugins=(common-aliases alias-tips notify)
-fi
-source $ZSH/oh-my-zsh.sh
-
-#---------------------  ALIAS ------------------------------
-alias cls=clear
-alias ll='ls -l'
-alias la='ls -a'
-alias zshrc='e ~/.zshrc'
-alias vimrc='e ~/.vimrc'
-alias i3c='e ${HOME}/.settings/i3/config'
-alias o='xdg-open'
-#alias -g grep='grep -I'
-#---------------------  ALIAS ------------------------------
-
-if [ -e ${HOME}/.myzshrc ]; then
-    source ${HOME}/.myzshrc
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-#---------------------  ZSH OPTIONS ------------------------------
-export KEYTIMEOUT=1 #reduce esc key timeout in vim mode to 0.1 seconds
-bindkey -v #zsh vi keybindings
-bindkey '^[OA' up-line-or-beginning-search #up arrow use the commands previous history
-bindkey '^[OB' down-line-or-beginning-search #down arrrow use the commands previous history
-bindkey "^I" expand-or-complete-with-dots #insert red dots when waiting for completion
-HISTSIZE=10000000 #number of commands from history file loaded into the shell’s memory
-SAVEHIST=10000000 #number of commands the history file can hold
-setopt HIST_FIND_NO_DUPS #when searching/scrolling through history, ignore dupe entries
-setopt HIST_SAVE_NO_DUPS #Don't write duplicate entries in the history file.
-setopt correct #zsh spelling correction
-setopt extended_glob
-#---------------------  ZSH OPTIONS ------------------------------
+#If you come from bash you might have to change your $PATH.
+export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-#Increase the number of open file descriptors.
-#This is needed while building android
-ulimit -S -n 1024
-export SVN_EDITOR=vim
-export CCACHE_DIR=$HOME/Work/ccache
-export USE_CCACHE=1
+fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
+# Path to your oh-my-zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
 
-export MARKPATH=$HOME/.go-dirs
+# BELL SPECIFICS
+alias proxy="export HTTP_PROXY=http://fastweb.int.bell.ca:80;export HTTPS_PROXY=http://fastweb.int.bell.ca:80;export NO_PROXY=bell.ca,localhost,127.0.0.1,lab-services.ca"
+alias noproxy="unset HTTP_PROXY;unset HTTPS_PROXY;unset NO_PROXY"
+alias datlab_vpn="sudo bash $HOME/datlab-docker.sh"
+alias dce="docker-compose"
+
+autoload -U +X compinit && compinit
+# ZSH PLUGINS
+source <(kubectl completion zsh)
+source $HOME/enhancd/init.sh
+MYVIMRC=$HOME/.vimrc
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+ZSH_THEME="powerlevel10k/powerlevel10k"
+
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in $ZSH/themes/
+# If set to an empty array, this variable will have no effect.
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
+
+# Uncomment one of the following lines to change the auto-update behavior
+# zstyle ':omz:update' mode disabled  # disable automatic updates
+# zstyle ':omz:update' mode auto      # update automatically without asking
+# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
+
+# Uncomment the following line to change how often to auto-update (in days).
+# zstyle ':omz:update' frequency 13
+
+# Uncomment the following line if pasting URLs and other text is messed up.
+# DISABLE_MAGIC_FUNCTIONS="true"
+
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
+
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+# You can also set it to another string to have that shown instead of the default red dots.
+# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
+# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
+# COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
+# HIST_STAMPS="mm/dd/yyyy"
+
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
+
+export MARKPATH=$HOME/.goto-dirs
 
 # Populate the hash for dir bookmarks
 for link ($MARKPATH/*(N@)) {
 	hash -d -- ${link:t}=${link:A}
 }
 
-function go {
+function goto {
     if [ -z "$1" ]; then
         #no arguments given
         hash -d
@@ -87,14 +130,14 @@ function unsave {
     else
         #if bookmark exists in hash table, then remove
         if [ -h "$MARKPATH/$1" ]; then
-            rm -If ~/.go-dirs/$1
+            rm -If ~/.goto-dirs/$1
             unhash -d $1
         fi
 	  fi
 }
 
 #zsh completion for go commands
-function go_completion {
+function goto_completion {
     #for each link in MARKPATH
     for link ($MARKPATH/*(N@)) {
             #add to completion
@@ -102,82 +145,44 @@ function go_completion {
     }
 }
 
-#call go_completion for go auto completion
-compdef go_completion go
 
-# Function for always using one (and only one) vim server
-# If you really want a new vim session, simply do not pass any argument to this function.
-function v {
-    vim_orig=$(which 2>/dev/null vim)
-    if [ -z $vim_orig ]; then
-        echo "$SHELL: vim: command not found"
-        return 127;
-    fi
-    $vim_orig --serverlist | grep -q VIM
-    # If there is already a vimserver, use it
-    # unless no args were given
-    if [ $? -eq 0 ]; then
-        if [ $# -eq 0 ]; then
-            $vim_orig
-        else
-            $vim_orig --remote "$@"
-        fi
-	  else
-		    $vim_orig --servername vim "$@"
-	  fi
-}
+# Which plugins would you like to load?
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(git)
 
-#open file in an existing instance of emacs if it exists or create a new frame otherwise
-function e()
-{
-	WINDOWS=$(xdotool search --all --onlyvisible emacs 2> /dev/null)
-	if [ ! -z $WINDOWS ]; then
-		# an existing frame of emacs already exists
-		if [ "$#" -ne 0 ]; then
-			# user has supplied a file to open
-			emacsclient -n $@
-		else
-			# just focus the emacs window if a file hasn't been supplied
-			i3-msg '[class="Emacs"] focus' > /dev/null 2>&1
-			return
-		fi
-	else
-		# crete a new frame and open the file
-		emacsclient -nc $@
-	fi
-}
+source $ZSH/oh-my-zsh.sh
 
-function disp()
-{
-    if [ "$1" = "m" ]; then
-        # enable main display
-		~/.screenlayout/external.sh
-    else
-        # enable laptop screen
-        ~/.screenlayout/internal.sh
-    fi
-    ~/.settings/i3/dock.sh
-}
+# User configuration
 
-# Set background wallpaper only the first time
-if [ ! -e /tmp/wallpaper ]; then
-    touch /tmp/wallpaper
-    if [ -d ${HOME}/Pictures/wallpapers ]; then
-        feh --randomize --bg-fill ${HOME}/Pictures/wallpapers/*
-    fi
-fi
+# export MANPATH="/usr/local/man:$MANPATH"
 
-#export PIP_REQUIRE_VIRTUALENV=true # pip should only run if there is a virtualenv currently activated
-export PIP_DOWNLOAD_CACHE=${HOME}/.pip/cache # cache pip-installed packages to avoid re-downloading
-export EDITOR=`which vim` #ZSH default editor
-# If emacs isn't started while starting emacsclient, this will auto start
-export ALTERNATE_EDITOR=""
-export TERM=xterm-256color
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# ZSH Syntax Highlighting note this should be the last entry
-if [ -e $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-	source $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
+source $HOME/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
