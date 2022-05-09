@@ -1,10 +1,6 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-{
-	eval `ssh-agent`
-	ssh-add ~/.ssh/ddang_sshkey
-} &> /dev/null
 
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -16,12 +12,6 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-
-# BELL SPECIFICS
-alias proxy="export HTTP_PROXY=http://fastweb.int.bell.ca:80;export HTTPS_PROXY=http://fastweb.int.bell.ca:80;export NO_PROXY=bell.ca,localhost,127.0.0.1,lab-services.ca"
-alias noproxy="unset HTTP_PROXY;unset HTTPS_PROXY;unset NO_PROXY"
-alias datlab_vpn="sudo bash $HOME/datlab-docker.sh"
-alias dce="docker-compose"
 
 autoload -U +X compinit && compinit
 # ZSH PLUGINS
