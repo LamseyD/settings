@@ -22,11 +22,28 @@ MYVIMRC=$HOME/.vimrc
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # BELL SPECIFICS -- ALIAS
-alias dce="docker-compose"
+alias dce="docker compose"
+alias dcex="docker compose exec -it"
+alias dcud="docker compose up -d"
+alias dcb="docker compose build"
 alias cls=clear
 alias ll='ls -l'
 alias la='ls -a'
 alias lal='ls -al'
+alias goland='/usr/local/bin/goland'
+alias charm='/usr/local/bin/charm'
+alias idea='/usr/local/bin/idea'
+alias timenow='date +"%Y-%m-%dT%H:%M:%S%z"'
+alias gpo='git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)'
+alias gp='git push'
+alias gpl='git pull'
+alias py='python3'
+alias k='kubectl'
+alias ocev='oc get events --sort-by='\''.metadata.creationTimestamp'\''' 
+alias firefox='open -a Firefox'
+alias clr_pycache='find . | grep -E "(/__pycache__$|\.pyc$|\.pyo$)" | xargs rm -rf'
+alias go_fmt_all='gofmt -s -w .'
+
 
 # GOTO SHORTHANDS
 export MARKPATH=$HOME/.goto-dirs
@@ -42,7 +59,7 @@ function goto {
         hash -d
     else
 		    ~$1
-	  fi
+	fi
 }
 
 function save {
@@ -58,7 +75,7 @@ function save {
         fi
         ln -s $PWD $MARKPATH/$1
         hash -d -- $1=$PWD
-	  fi
+	fi
 }
 
 function unsave {
@@ -73,7 +90,7 @@ function unsave {
             rm -If ~/.goto-dirs/$1
             unhash -d $1
         fi
-	  fi
+    fi
 }
 
 #zsh completion for go commands
@@ -92,7 +109,8 @@ compdef goto_completion goto
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
-
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-source $HOME/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+[[ $commands[kubectl] ]] && source <(kubectl completion zsh)
+ 
